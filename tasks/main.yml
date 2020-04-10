@@ -6,13 +6,13 @@
     version: master
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Install fzf
   shell: '${HOME}/.fzf/install --all'
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Clone tmux config from git
   git:
@@ -21,7 +21,7 @@
     version: master
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Create symlink tmux.conf
   file:
@@ -30,7 +30,7 @@
     state: link
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Clone vundle from git
   git:
@@ -39,7 +39,7 @@
     version: master
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Source .vimrc.local in .vimrc
   blockinfile:
@@ -52,14 +52,14 @@
       endif
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Install viasite-ansible.zsh
   include_role:
     name: viasite-ansible.zsh
   vars:
     zsh_user: '{{ unix_home_setup_config.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
   loop_control:
     loop_var: unix_home_setup_config
 
@@ -70,7 +70,7 @@
     version: master
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Create symlink .tmux.conf.local
   file:
@@ -79,7 +79,7 @@
     state: link
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Create symlink .zshrc.local
   file:
@@ -88,7 +88,7 @@
     state: link
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
 
 - name: Create symlink .vimrc.local
   file:
@@ -97,4 +97,4 @@
     state: link
   become: yes
   become_user: '{{ item.user }}'
-  with_items: '{{ unix_home_setup_configs }}'
+  loop: "{{ unix_home_setup_configs|flatten(levels=1) }}"
