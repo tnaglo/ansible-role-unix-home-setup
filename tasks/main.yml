@@ -1,0 +1,100 @@
+---
+- name: Clone fzf from git
+  git:
+    repo: '{{ fzf_repo }}'
+    dest: '${HOME}/.fzf'
+    version: master
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Install fzf
+  shell: '${HOME}/.fzf/install --all'
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Clone tmux config from git
+  git:
+    repo: '{{ item.tmux_base_config_repo|default(tmux_base_config_repo) }}'
+    dest: '${HOME}/.tmux'
+    version: master
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Create symlink tmux.conf
+  file:
+    src: '${HOME}/.tmux/.tmux.conf'
+    dest: '${HOME}/.tmux.conf'
+    state: link
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Clone vundle from git
+  git:
+    repo: '{{ vundle_repo }}'
+    dest: '${HOME}/.vim/bundle/Vundle.vim'
+    version: master
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Source .vimrc.local in .vimrc
+  blockinfile:
+    path: '${HOME}/.vimrc'
+    create: yes
+    marker: '"{mark} ANSIBLE MANAGED BLOCK'
+    block: |
+      if filereadable(glob("${HOME}/.vimrc.local"))
+        source ${HOME}/.vimrc.local
+      endif
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Install viasite-ansible.zsh
+  include_role:
+    name: viasite-ansible.zsh
+  vars:
+    zsh_user: '{{ unix_home_setup_config.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+  loop_control:
+    loop_var: unix_home_setup_config
+
+- name: Clone .local-configs from git
+  git:
+    repo: '{{ item.local_configs_repo|default(local_configs_repo) }}'
+    dest: '${HOME}/.local-configs'
+    version: master
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Create symlink .tmux.conf.local
+  file:
+    src: '${HOME}/.local-configs/.tmux.conf.local'
+    dest: '${HOME}/.tmux.conf.local'
+    state: link
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Create symlink .zshrc.local
+  file:
+    src: '${HOME}/.local-configs/.zshrc.local'
+    dest: '${HOME}/.zshrc.local'
+    state: link
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'
+
+- name: Create symlink .vimrc.local
+  file:
+    src: '${HOME}/.local-configs/.vimrc.local'
+    dest: '${HOME}/.vimrc.local'
+    state: link
+  become: yes
+  become_user: '{{ item.user }}'
+  with_items: '{{ unix_home_setup_configs }}'

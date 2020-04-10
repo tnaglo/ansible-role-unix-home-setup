@@ -1,0 +1,30 @@
+galaxy_info:
+  role_name: unix_home_setup
+  author: Tomasz Naglo
+  description: Setup unix home directory (fzf, shell+vim+tmux configs and more), to make users feel at home.
+  license: MIT
+  min_ansible_version: 2.9
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: CentOS
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+
+  galaxy_tags:
+    - user
+    - tmux
+    - zsh
+    - vim
+    - fzf
+
+dependencies:
+  - viasite-ansible.zsh

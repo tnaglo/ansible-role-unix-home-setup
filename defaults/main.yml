@@ -1,0 +1,14 @@
+---
+# defaults file for unix-home-setup
+
+# URL to the fzf repository
+fzf_repo: https://github.com/junegunn/fzf.git
+
+# URL to the vundle repository
+vundle_repo: https://github.com/VundleVim/Vundle.vim.git
+
+# default URL of the local_configs_repo
+local_configs_repo: "https://github.com/tnaglo/.local-configs.git"
+
+# default URL of the tmux_base_config_repo
+tmux_base_config_repo: "https://github.com/tnaglo/.tmux.git"
